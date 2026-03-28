@@ -1,3 +1,5 @@
+<img width="1088" height="540" alt="Cryptex" src="https://github.com/user-attachments/assets/494b6cbb-18ea-49a6-ba93-e6422e4bd896" />
+
 # CRYPTEX v2.2
 ### Real-Time Cryptocurrency Analysis Dashboard
 
