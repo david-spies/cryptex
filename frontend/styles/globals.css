@@ -1,0 +1,684 @@
+/* =============================================================
+   frontend/styles/globals.css
+   CRYPTEX v2.2 — Global Stylesheet
+   
+   Load order:
+     1. Tailwind directives  (base / components / utilities)
+     2. CSS custom properties (design tokens)
+     3. Base resets & body styles
+     4. Typography
+     5. Scrollbar
+     6. Keyframe animations
+     7. CRT / Glitch effects
+     8. Utility classes
+     9. Layout components
+    10. Responsive breakpoints
+   ============================================================= */
+
+/* ── 1. Tailwind ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── 2. Design Tokens ────────────────────────────────────────── */
+:root {
+  /* Background layers */
+  --color-bg:       #020817;
+  --color-bg-card:  #0a1628;
+  --color-bg-dark:  #060f1e;
+  --color-bg-modal: #0d1f38;
+  --color-slate:    #1e293b;
+
+  /* Accent — Solarized Green */
+  --color-green:      #88bb65;
+  --color-green-dim:  rgba(136, 187, 101, 0.13);
+  --color-green-glow: rgba(136, 187, 101, 0.38);
+
+  /* Accent — Slate Blue */
+  --color-blue:      #3b82f6;
+  --color-blue-dim:  rgba(59, 130, 246, 0.13);
+  --color-blue-glow: rgba(59, 130, 246, 0.38);
+
+  /* Text */
+  --color-white:  #f8fafc;
+  --color-silver: #94a3b8;
+  --color-red:    #ef4444;
+
+  /* Typography */
+  --font-display: "Orbitron", monospace;
+  --font-mono:    "Share Tech Mono", monospace;
+
+  /* Spacing */
+  --page-pad: clamp(10px, 4vw, 22px);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-mid:  0.25s ease;
+}
+
+/* ── 3. Base Reset & Body ────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  background-color: var(--color-bg);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent content jumping when scrollbar appears */
+  scrollbar-gutter: stable;
+}
+
+/* ── 4. Typography ───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-white);
+}
+
+p, span, div, input, button, label {
+  font-family: var(--font-mono);
+}
+
+/* Selection highlight — tech-noir green */
+::selection {
+  background-color: var(--color-green);
+  color: var(--color-bg);
+}
+
+/* ── 5. Custom Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-green);
+  border-radius: 2px;
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-blue);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-green) var(--color-bg);
+}
+
+/* ── 6. Keyframe Animations ──────────────────────────────────── */
+
+/* Chromatic glitch — used on title pseudo-elements */
+@keyframes glitch {
+  0%,  100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  10%        { clip-path: inset(10% 0 60% 0); transform: translate(-3px,  1px); }
+  20%        { clip-path: inset(50% 0 30% 0); transform: translate( 3px, -1px); }
+  30%        { clip-path: inset(20% 0 70% 0); transform: translate(-2px,  2px); }
+  40%        { clip-path: inset(70% 0 10% 0); transform: translate( 2px, -2px); }
+  50%        { clip-path: inset(0 0 0 0);     transform: translate(0); }
+}
+
+/* Subtle screen flicker */
+@keyframes flicker {
+  0%,  100% { opacity: 1; }
+  92%        { opacity: 1; }
+  93%        { opacity: 0.30; }
+  94%        { opacity: 1; }
+  96%        { opacity: 0.55; }
+  97%        { opacity: 1; }
+}
+
+/* CRT scanline sweep */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Live dot pulse */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Ticker marquee */
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Panel / card entrance */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Drawer slide-up (mobile) */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* Modal pop-in (desktop) */
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.95) translateY(6px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Backdrop fade */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Neon pulse on focused borders */
+@keyframes neonPulse {
+  0%, 100% { box-shadow: 0 0 4px var(--color-green); }
+  50%       { box-shadow: 0 0 16px var(--color-green), 0 0 32px var(--color-green-glow); }
+}
+
+/* ── 7. CRT & Glitch Effects ─────────────────────────────────── */
+
+/* Glitch title — paired with data-text attribute */
+.glitch-title {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-green);
+  letter-spacing: clamp(2px, 1vw, 5px);
+  animation: flicker 7s infinite;
+}
+
+.glitch-title::before,
+.glitch-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.glitch-title::before {
+  color: var(--color-blue);
+  animation: glitch 3.5s infinite;
+  opacity: 0.65;
+}
+
+.glitch-title::after {
+  color: var(--color-green);
+  animation: glitch 3.5s infinite 0.18s;
+  opacity: 0.45;
+}
+
+/* Moving scanline bar */
+.scanbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55px;
+  background: linear-gradient(
+    transparent,
+    rgba(136, 187, 101, 0.022),
+    transparent
+  );
+  animation: scanline 9s linear infinite;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Static CRT raster lines */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.035) 2px,
+    rgba(0, 0, 0, 0.035) 4px
+  );
+}
+
+/* ── 8. Utility Classes ──────────────────────────────────────── */
+
+/* Tag — small allcaps label */
+.tag {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--color-silver);
+  text-transform: uppercase;
+}
+
+/* Animated live indicator dot */
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: blink 1.1s infinite;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Spinner */
+.spin {
+  animation: spin 0.9s linear infinite;
+  display: inline-block;
+}
+
+/* Entrance animations */
+.pop  { animation: popIn 0.28s ease both; }
+.rise { animation: rise  0.35s ease both; }
+
+/* Bare input reset */
+input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+}
+
+/* ── 9. Buttons ──────────────────────────────────────────────── */
+
+.btn {
+  background: transparent;
+  border: 1px solid var(--color-green);
+  color: var(--color-green);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  padding: 5px 13px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn:hover,
+.btn:active {
+  background: var(--color-green-dim);
+  box-shadow: 0 0 10px var(--color-green-glow);
+}
+
+.btn.on {
+  background: var(--color-green);
+  color: var(--color-bg);
+  box-shadow: 0 0 12px var(--color-green-glow);
+}
+
+/* Blue variant */
+.btn.bd {
+  border-color: var(--color-blue);
+  color: var(--color-blue);
+}
+
+.btn.bd:hover,
+.btn.bd:active {
+  background: var(--color-blue-dim);
+  box-shadow: 0 0 10px var(--color-blue-glow);
+}
+
+.btn.bd.on {
+  background: var(--color-blue);
+  color: var(--color-bg);
+}
+
+/* Red variant (destructive / warning) */
+.btn.danger {
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+
+.btn.danger:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* ── 10. Layout Components ───────────────────────────────────── */
+
+/* ─── Site Header ─── */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--page-pad);
+  border-bottom: 1px solid rgba(136, 187, 101, 0.17);
+  background: rgba(2, 8, 23, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 10px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.header-brand .glitch-title {
+  font-size: clamp(14px, 5vw, 22px);
+}
+
+.version-badge {
+  font-size: 7px;
+  color: rgba(136, 187, 101, 0.38);
+  letter-spacing: 2px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(7px, 2vw, 14px);
+}
+
+.header-clock {
+  font-size: 8px;
+  color: var(--color-silver);
+  letter-spacing: 1px;
+  display: none; /* shown via media query below */
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+/* ─── Price Ticker ─── */
+.ticker-wrap {
+  background: var(--color-bg-dark);
+  border-bottom: 1px solid rgba(136, 187, 101, 0.07);
+  padding: 4px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-inner {
+  display: inline-flex;
+  gap: 32px;
+  animation: marquee 55s linear infinite;
+  white-space: nowrap;
+}
+
+.ticker-item {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* ─── Demo / Error Banner ─── */
+.demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 7px var(--page-pad);
+  background: rgba(59, 130, 246, 0.07);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  font-size: 9px;
+  color: var(--color-silver);
+  letter-spacing: 1px;
+}
+
+.banner-sub {
+  color: rgba(148, 163, 184, 0.5);
+}
+
+/* ─── Market Summary Bar ─── */
+.market-bar {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 9px var(--page-pad);
+  border-bottom: 1px solid rgba(136, 187, 101, 0.08);
+  background: rgba(6, 15, 30, 0.65);
+}
+
+.market-stat { /* each KPI cell */ }
+
+.market-stat-value {
+  font-size: clamp(9px, 2.5vw, 11px);
+  font-family: var(--font-display);
+  margin-top: 2px;
+}
+
+/* ─── Main Content ─── */
+.main-content {
+  padding: 13px var(--page-pad) 68px;
+}
+
+/* ─── Filter / Sort Toolbar ─── */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 11px;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.toolbar-filters,
+.toolbar-sort {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ─── Usage Hint ─── */
+.usage-hint {
+  font-size: 9px;
+  color: rgba(136, 187, 101, 0.33);
+  letter-spacing: 2px;
+  margin-bottom: 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ─── Coin Grid ─── */
+.coin-grid {
+  display: grid;
+  gap: 9px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ─── Empty / Loading States ─── */
+.loading-state {
+  padding: 60px;
+  text-align: center;
+  color: var(--color-silver);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-silver);
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* ─── Analytics Drawer ─── */
+.drawer-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.87);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: fadeIn 0.22s ease;
+}
+
+.drawer-panel {
+  position: relative;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-top: 2px solid var(--color-green);
+  box-shadow: 0 -10px 45px var(--color-green-glow);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tab row inside drawer */
+.tab-nav {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(136, 187, 101, 0.1);
+  flex-wrap: wrap;
+}
+
+/* Stats 2-col grid inside drawer */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ─── Command Palette ─── */
+.cmd-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: clamp(28px, 7vh, 88px);
+}
+
+.cmd-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.93);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cmd-box {
+  position: relative;
+  width: min(530px, 95vw);
+  border: 1px solid var(--color-green);
+  box-shadow: 0 0 45px var(--color-green-glow);
+  animation: rise 0.2s ease;
+}
+
+/* ─── Site Footer ─── */
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 7px var(--page-pad);
+  border-top: 1px solid rgba(136, 187, 101, 0.09);
+  background: rgba(2, 8, 23, 0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.footer-left  { font-size: 8px; color: rgba(136, 187, 101, 0.28); letter-spacing: 2px; }
+.footer-right { font-size: 8px; color: rgba(59, 130, 246, 0.32);  letter-spacing: 2px; }
+
+/* ── 11. Responsive Breakpoints ─────────────────────────────── */
+
+/* 500px — 3-col grid, wider market bar gaps */
+@media (min-width: 500px) {
+  .coin-grid  { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .market-bar { gap: 22px; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 640px — show UTC clock in header */
+@media (min-width: 640px) {
+  .header-clock { display: inline; }
+  .market-bar   { gap: 28px; }
+}
+
+/* 720px — 4-col grid */
+@media (min-width: 720px) {
+  .coin-grid { grid-template-columns: repeat(4, 1fr); gap: 11px; }
+}
+
+/* 768px — drawer becomes centered modal */
+@media (min-width: 768px) {
+  .drawer-wrap {
+    justify-content: center;
+    align-items: center;
+  }
+  .drawer-panel {
+    max-height: 88vh;
+    width: min(760px, 95vw);
+    border: 1px solid rgba(136, 187, 101, 0.28);
+    border-top: 2px solid var(--color-green);
+    animation: popIn 0.26s ease;
+  }
+}
+
+/* 1060px — 5-col grid */
+@media (min-width: 1060px) {
+  .coin-grid { grid-template-columns: repeat(5, 1fr); gap: 13px; }
+}
+
+/* 1380px — 6-col grid */
+@media (min-width: 1380px) {
+  .coin-grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ── 12. Print ───────────────────────────────────────────────── */
+@media print {
+  .scanbar,
+  .crt-overlay,
+  .site-footer,
+  .demo-banner { display: none; }
+  body { background: white; color: black; }
+}
