@@ -1,0 +1,55 @@
+# backend/requirements.txt
+# =============================================================
+#  CRYPTEX v2.2 — Python Backend Dependencies
+#  Data source: CoinMarketCap Professional API
+#
+#  Install:
+#    pip install -r requirements.txt
+#
+#  Or inside a virtualenv:
+#    python3 -m venv venv && source venv/bin/activate
+#    pip install -r requirements.txt
+#
+#  CMC API key setup:
+#    1. Register free at https://coinmarketcap.com/api/
+#    2. Copy your key into backend/.env as: CMC_API_KEY=your_key_here
+#    3. Free "Basic" plan covers /listings/latest, /quotes/latest,
+#       and /quotes/historical — sufficient for all dashboard features.
+#    4. OHLCV historical (/ohlcv/historical) requires Standard plan+.
+#       On Basic, the backend automatically falls back to constructing
+#       approximate OHLC data from the quotes/historical endpoint.
+# =============================================================
+
+# ── Web Framework ─────────────────────────────────────────────
+fastapi==0.111.0          # ASGI framework — routing, validation, Swagger docs
+uvicorn[standard]==0.29.0 # ASGI server (includes websockets + httptools)
+
+# ── HTTP Client ───────────────────────────────────────────────
+httpx==0.27.0             # Async HTTP client for CoinMarketCap API calls
+
+# ── Data / Analytics ─────────────────────────────────────────
+pandas==2.2.2             # DataFrame + .pct_change().corr() for Pearson matrix
+numpy==1.26.4             # NaN replacement, matrix clamping
+
+# ── Redis Cache (optional) ────────────────────────────────────
+redis[asyncio]==5.0.4     # Async Redis client — set REDIS_URL in .env to enable
+                          # Without Redis the app makes direct API calls each request
+
+# ── Config / Environment ──────────────────────────────────────
+python-dotenv==1.0.1      # Loads backend/.env (CMC_API_KEY, REDIS_URL, etc.)
+
+# ── Pydantic (FastAPI peer dep — pinned for stability) ────────
+pydantic==2.7.1           # Response model validation and serialization
+pydantic-settings==2.2.1  # BaseSettings pattern for typed env config
+
+# ── Production Server ─────────────────────────────────────────
+gunicorn==22.0.0          # Multi-worker process manager for production
+                          # Usage: gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
+
+# ── Dev / Testing (uncomment in dev environments) ────────────
+# pytest==8.2.0
+# pytest-asyncio==0.23.6
+# httpx==0.27.0            # also used for TestClient
+# black==24.4.2
+# ruff==0.4.4
+# mypy==1.10.0
